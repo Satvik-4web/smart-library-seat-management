@@ -6,7 +6,10 @@
 # Smart Library Seat Management System
 
 **Author(s)**:
-`(Author)` [Your Name/Team details]
+Ayush Singh Sikarwar (1024030271)  
+Satvik Ganda (1024030158)  
+Aryan Bansal (1024030204)  
+Rishit Parnami (1024030270)
 
 ## Overview
 We are building a smart **Library Seat Management System** for our college library. The goal is to create a system that provides **real-time visibility and controlled management of library seating**, making seat usage fair and efficient.
