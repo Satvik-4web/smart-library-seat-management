@@ -1,0 +1,51 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titling}
+
+\title{Smart Library Seat Management System}
+
+\author{
+  Ayush Singh Sikarwar \and Satvik Ganda \and Aryan Bansal \and Rishit Parnami
+}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{center}
+\large \textbf{Project Report: Final Stage} \\
+\vspace{0.5cm}
+UCS503: Software Engineering \\
+Thapar Institute of Engineering and Technology
+\end{center}
+
+\section{Executive Summary}
+The Smart Library Seat Management System is a comprehensive web-based platform designed to optimize physical study space allocation. By introducing real-time occupancy tracking and automated policy enforcement, the system drastically reduces seat-hunting friction and ensures fair usage of library resources.
+
+\section{System Architecture}
+The system employs a scalable three-tier architecture:
+\begin{itemize}
+    \item \textbf{Frontend:} A responsive single-page application enabling students to interact with the library floor map and manage their session statuses.
+    \item \textbf{Backend API:} A RESTful service handling authentication, session timers, and seat allocation rules.
+    \item \textbf{Database:} A relational database maintaining persistent state for users, physical layout maps, and historical analytics.
+\end{itemize}
+
+\section{Key Features Delivered}
+\begin{enumerate}
+    \item \textbf{Interactive Floor Map:} Real-time visualization of seat availability across library zones.
+    \item \textbf{Temporary Away Permit:} Allows students to temporarily leave their seat (e.g., 30 mins limit), releasing it automatically if they overstay.
+    \item \textbf{Smart Seat Finder:} AI-driven recommendations based on student preferences (e.g., power outlets, quiet zones).
+    \item \textbf{Admin Dashboard:} Provides library administrators with occupancy metrics, allowing them to manage policies and monitor daily usage trends.
+\end{enumerate}
+
+\section{Evaluation \& Results}
+The pilot testing revealed a significant reduction in the average time students spent searching for seats. Furthermore, the automated release mechanism for expired 'Temporary Away' sessions recovered a measurable percentage of seating capacity that would otherwise remain blocked by unattended belongings.
+
+\section{Conclusion \& Future Work}
+The deployed system meets all core objectives of improving transparency and fairness in library seating. Future iterations could integrate physical IoT sensors for automated occupancy validation and construct a 3D digital twin of the library environment for enhanced spatial visualization.
+
+\end{document}

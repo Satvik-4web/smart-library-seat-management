@@ -1,0 +1,51 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titling}
+
+\title{Smart Library Seat Management System}
+
+\author{
+  Ayush Singh Sikarwar \and Satvik Ganda \and Aryan Bansal \and Rishit Parnami
+}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{center}
+\large \textbf{Project Report: Prototype Stage} \\
+\vspace{0.5cm}
+UCS503: Software Engineering \\
+Thapar Institute of Engineering and Technology
+\end{center}
+
+\section{Introduction}
+This report outlines the prototype stage of the Smart Library Seat Management System. The primary goal of this stage is to establish the core web architecture and validate the basic user workflow (seat selection and temporary-away status) prior to the final build.
+
+\section{Prototype Features Implemented}
+\begin{itemize}
+    \item \textbf{Basic User Authentication:} Users can log into the system with their college credentials.
+    \item \textbf{Database Schema:} Core tables for Users, Seats, and Sessions are designed and implemented.
+    \item \textbf{Seat Status API:} Endpoints to fetch current seat statuses (Available, Occupied, Temporarily Away) are operational.
+    \item \textbf{Frontend Skeleton:} A rudimentary UI to display seats and their statuses.
+\end{itemize}
+
+\section{Challenges Faced \& Mitigations}
+\begin{itemize}
+    \item \textbf{Real-Time Synchronization:} Managing concurrent seat requests was initially challenging. We mitigated this by planning WebSockets/polling strategies for the final phase.
+    \item \textbf{Data Consistency:} Ensuring a seat isn't double-booked during the prototype phase was handled using simple database locks.
+\end{itemize}
+
+\section{Next Steps for Final Release}
+\begin{itemize}
+    \item Implement the complete interactive floor map.
+    \item Finalize the `Temporary Away` countdown timer workflow.
+    \item Develop the Admin Dashboard for analytics.
+    \item Finalize UI/UX improvements.
+\end{itemize}
+
+\end{document}

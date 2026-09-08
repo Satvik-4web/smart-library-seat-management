@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Seat Map</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .seat-container { display: flex; gap: 10px; margin-top: 20px; }
+        .seat { padding: 20px; border: 2px solid #ccc; border-radius: 8px; text-align: center; width: 100px; cursor: pointer;}
+        .available { background-color: #d4edda; border-color: #c3e6cb; }
+        .occupied { background-color: #f8d7da; border-color: #f5c6cb; pointer-events: none;}
+        .temporarily_away { background-color: #fff3cd; border-color: #ffeeba; }
+    </style>
+</head>
+<body>
+    <h1>Library Seat Management - Floor 1</h1>
+    <p>Click an available seat to occupy it.</p>
+    <div id="seat-map" class="seat-container">
+        <!-- Seats will be rendered here by JS -->
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
