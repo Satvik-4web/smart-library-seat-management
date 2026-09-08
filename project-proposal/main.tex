@@ -1,65 +1,36 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
+\usepackage{amsmath}
 \usepackage{enumitem}
 \usepackage{graphicx}
 \usepackage{xcolor}
-
-% -----------------------------------------------------
-% bvraghav-tiet-ucs503p-article.sty
-% -----------------------------------------------------
-
-% Variable: Lab Instructor
-\makeatletter \newcommand{\BvrSetLabInstructor}[1]{%
-  \gdef\Bvr@LabInstructor{#1}}
-% default
-\newcommand{\Bvr@LabInstructor}{Dr. Raghav %
-  B. Venkataramaiyer}
-% public accessor
-\newcommand{\BvrLabInstructorValue}{\Bvr@LabInstructor}
-\makeatother
-
-% Add subtitle
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
 \usepackage{titling}
-% -- Set title bold
-\pretitle{\begin{center}\bfseries\fontsize{18bp}{18bp}\selectfont}
-\makeatletter
-\newcommand{\BvrSubtitle}[1]{%
-  \posttitle{%
-    \par\end{center}
-    \begin{center}\large#1\end{center}
-    \vskip 0.5em}%
-}
-\makeatother
 
-% Hints in the section title(s)
-\newcommand{\BvrHint}[1]{%
-  {\normalfont\normalsize\itshape\hfill #1}}
+\definecolor{LibraryBlue}{HTML}{1E3A5F}
+\definecolor{LibraryAccent}{HTML}{D97706}
 
-% -----------------------------------------------------
+\newcommand{\BvrHint}[1]{{\normalfont\normalsize\itshape\hfill #1}}
 
-\title{Smart Library Seat Management System}
+\title{\textbf{Smart Library Seat Management System}\\
+\large On-Demand Seating Allocation, Tracking, and Analytics Platform}
 
-\BvrSetLabInstructor{Dr. Raghav B. Venkataramaiyer}
-
-\BvrSubtitle{%
-  Project Proposal for UCS503P  \\
-  Submitted to: \BvrLabInstructorValue \\ \bfseries
-  Thapar Institute of Engineering and Technology% 
-}
+\pretitle{\begin{center}\bfseries\fontsize{18bp}{22bp}\selectfont}
+\posttitle{\par\end{center}\vskip 0.5em}
 
 \author{
-  Ayush Singh Sikarwar, CSED%
-  \thanks{Roll No: \texttt{1024030271}}
-  \and 
-  Satvik Ganda, CSED%
-  \thanks{Roll No: \texttt{1024030158}}
-  \and 
-  Aryan Bansal, CSED%
-  \thanks{Roll No: \texttt{1024030204}}
-  \and 
-  Rishit Parnami, CSED%
-  \thanks{Roll No: \texttt{1024030270}}
+Ayush Singh Sikarwar, CSED\\
+Roll No: \texttt{1024030271}\\[4pt]
+Satvik Ganda, CSED\\
+Roll No: \texttt{1024030158}\\[4pt]
+Aryan Bansal, CSED\\
+Roll No: \texttt{1024030204}\\[4pt]
+Rishit Parnami, CSED\\
+Roll No: \texttt{1024030270}
 }
 
 \date{\today}
@@ -67,171 +38,154 @@
 \begin{document}
 \maketitle
 
-\section{Higher-order goal%
-  \BvrHint{\ldots secondary framing}}
-This project aims to optimize the utilization of physical study spaces in educational institutions by providing real-time visibility and fair management of library seating. The immediate engineering objective is to translate \emph{efficient resource allocation and occupancy tracking} into a measurable, deployable software solution.
+\begin{center}
+\textbf{\color{LibraryAccent} Project Proposal for UCS503P -- Software Engineering Lab}\\
+Thapar Institute of Engineering and Technology
+\end{center}
 
-\section{Time-to-value %
-\BvrHint{\ldots primary heuristic}}
-\begin{itemize}[leftmargin=0.7cm]
-    \item We will deliver meaningful increments quickly by prototyping the core user workflow (seat viewing and temporary-away status) and validating it with users within a short iteration window.
-    \item We will prioritize fast feedback over perfection by using weekly iterations (and targeting CI-backed automation early) to reduce release friction.
-    \item Success is defined by what can be delivered and measured in the first iteration, then improved based on user feedback.
-\end{itemize}
+\section{Higher-order Goal \BvrHint{Real-world impact}}
+The Smart Library Seat Management System aims to transform the chaotic process of finding and retaining study spaces in college libraries into an organized, transparent, and fair digital experience. The system addresses the common issue of students blocking seats for extended periods while away, leading to wasted capacity and frustration for others. 
+
+The engineering objective is to build a robust software system that coordinates students, seating inventory, time-based policies, and real-time mapping through a unified workflow. This project offers a direct real-world use case while providing substantial software complexity to fulfill the learning outcomes of UCS503.
 
 \section{Problem Statement}
-Students currently have to physically roam around the library to find an empty seat. A major pain point is that many students leave the library temporarily for lunch, calls, or washroom breaks, but keep their belongings on their seats for long periods, effectively blocking those seats for other students.
+In peak academic periods, library seating becomes a scarce resource. Existing methods rely entirely on physical roaming, which is time-consuming and inefficient.
+
+The major problems are:
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{High Search Friction:} Students waste time navigating multiple floors to find available spots.
-    \item \textbf{Unfair Resource Blocking:} Unattended belongings block seats indefinitely.
-    \item \textbf{Low Transparency:} No real-time data on library occupancy levels.
-    \item \textbf{Suboptimal Space Utilization:} Librarians lack analytics to understand peak usage and effectively manage the layout.
+    \item \textbf{Uncertain availability:} Students waste time navigating multiple floors to find an empty seat.
+    \item \textbf{Unfair Resource Blocking:} Students leave their belongings to 'reserve' a seat for hours while they are out for lunch or classes.
+    \item \textbf{Poor Workflow Visibility:} Librarians cannot track which seats are genuinely occupied versus merely blocked.
+    \item \textbf{No Data-Driven Planning:} Lack of analytics regarding peak library hours, preferred zones, and overall seating utilization limits effective infrastructure planning.
 \end{itemize}
 
-\textbf{Why this matters now (contextual relevance):} In an educational setting with limited seating bandwidth, intelligent monitoring and policy-enforced release of temporarily abandoned seats can noticeably improve fairness and reduce wasted capacity.
+\section{Proposed Solution \BvrHint{Software Proposition}}
+The system will be developed as a responsive web-based platform connecting students and library administrators.
 
-\section{Proposed Solution %
-\BvrHint{\ldots Software Proposition}}
-\subsection{Overview}
-Build a \textbf{web-based} ``Library Seat Management'' system with the following components:
+The proposed system will provide:
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Real-Time Floor Map:} Interactive floor plan displaying live status (Available, Occupied, Temporarily Away).
-    \item \textbf{Temporary Away Permit:} Allows students to lock their seat for a short configurable time with a countdown timer.
-    \item \textbf{Smart Seat Finder:} AI-ranked recommendations based on preferences like quiet zones, power outlets, or group seating.
-    \item \textbf{Fair-Use and No-Show Protection:} Automatic seat release if students fail to check-in or overstay their break limits.
-    \item \textbf{Admin/Librarian Dashboard:} Live occupancy tracking, analytics, and policy configurations.
+    \item \textbf{Real-Time Floor Map:} A visual representation of seat statuses (Available, Occupied, Temporarily Away) across different floors.
+    \item \textbf{Smart Seat Finder:} Recommendations based on user preferences (e.g., quiet zone, charging port).
+    \item \textbf{Temporary Away Permits:} An enforced countdown timer (e.g., 30 minutes) allowing students to take breaks. If they overstay, the seat is automatically marked as available.
+    \item \textbf{Fair-Use Algorithms:} Limits on the number of breaks a student can take per day to prevent abuse.
+    \item \textbf{Operations Dashboard:} Administrators can monitor live occupancy, override seat statuses, and view utilization metrics.
 \end{itemize}
 
-\subsection{Core workflow}
+\section{Core Workflow}
+The principal workflow is:
 \begin{enumerate}[leftmargin=0.7cm]
-    \item Student scans ID card at the entrance to initiate an active session.
-    \item Student selects an available seat from the digital floor map.
-    \item Student activates a 'Temporary Away' permit if they need to leave for a short break (e.g., 30 mins).
-    \item System warns the user before expiration, and automatically releases the seat if the timer runs out.
-    \item Student scans ID at the exit to conclude the session and free up the seat.
+    \item Student authenticates via their college ID/SSO.
+    \item Student checks the interactive floor map or uses the Smart Finder for recommendations.
+    \item Student selects an available seat and digitally checks in.
+    \item If a break is needed, the student activates a ``Temporary Away'' permit.
+    \item A countdown timer begins. The student must check back in before the timer expires.
+    \item If the timer expires, the seat is automatically released.
+    \item Upon leaving the library, the student checks out, permanently freeing the seat.
 \end{enumerate}
 
-\subsection{Operational constraints for an educational setting}
+\section{Why This is Suitable for UCS503}
+This project goes beyond a standard CRUD application. The core challenge involves coordinating real-time state management, time-based automated triggers, concurrent user access, and dynamic visual layouts.
+
+This creates a practical software engineering problem involving:
 \begin{itemize}[leftmargin=0.7cm]
-    \item Keep the solution usable on low-to-mid range mobile devices via responsive web design.
-    \item Avoid dependence on expensive physical IoT sensors initially; focus on software-based workflows, with architecture supporting future IoT integration.
-    \item Design for deployability using common web hosting and managed databases.
+    \item UML and dynamic state workflow modelling;
+    \item Concurrency control and database lock design;
+    \item API design for real-time state propagation (e.g., WebSockets);
+    \item Agile backlog and sprint management;
+    \item Software testing and state verification.
 \end{itemize}
 
-\section{Solution Approach %
-\BvrHint{\ldots Engineering focus}}
-This is an engineering course project, so we focus on scalable administrative and workflow aspects.
+\section{Mapping to Course Learning Outcomes}
+\begin{longtable}{p{0.19\textwidth}p{0.73\textwidth}}
+\toprule
+\textbf{CLO} & \textbf{How it Demonstrates the CLO} \\
+\midrule
+\textbf{CLO 1} &
+An Agile/Incremental software process model will be adopted. The system can be delivered in discrete modules: authentication, static seat mapping, real-time status updates, and finally, the automated permit system. \\
 
-\subsection{Fairness and Abandoned Seat Detection %
-\BvrHint{\ldots non-research}}
-Detecting seat abandonment will be state-based:
+\textbf{CLO 2} &
+Requirements elicited from students and librarians will be modeled using use-case, activity, sequence, and state diagrams, culminating in a formal SRS document detailing the strict policy rules for seat blocking. \\
+
+\textbf{CLO 3} &
+The platform naturally supports a three-tier MVC architecture. It highlights the importance of low coupling (e.g., separating the countdown timer logic from the UI rendering logic) and cohesive API design. \\
+
+\textbf{CLO 4} &
+The seat lifecycle (Available $\rightarrow$ Occupied $\rightarrow$ Away $\rightarrow$ Released) provides highly testable state transitions. Unit tests will validate timer expirations, while integration tests will ensure the UI updates correctly upon state changes. \\
+
+\textbf{CLO 5} &
+The project will be managed using Agile methodologies, including user stories, sprint backlogs, and velocity tracking, heavily utilizing Git for version control and CI/CD pipelines. \\
+
+\bottomrule
+\end{longtable}
+
+\section{Requirements Engineering}
+\subsection{Stakeholders}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Track sessions through ID card entries/exits or digital check-ins.
-    \item Use simple timers to monitor 'Temporary Away' statuses.
-    \item Automatically transition seat status and alert admins based on simple configurable thresholds (e.g., >30 mins away).
+    \item Students (End Users)
+    \item Library Administrators (Operations)
+    \item IT System Maintainers
 \end{itemize}
 
-\subsection{Web architecture %
-\BvrHint{\ldots web-based solution}}
-A typical 3-tier web architecture:
-\begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Frontend:} Responsive UI for students (floor maps, dashboard) and staff (analytics, overrides).
-    \item \textbf{Backend API:} Authentication, session management, timer handling, seat allocation logic.
-    \item \textbf{Database:} Store users, seats, historical sessions, and layout metadata.
-\end{itemize}
-
-\subsection{CI/CD and fast delivery enabler}
-CI/CD will be used to:
-\begin{itemize}[leftmargin=0.7cm]
-    \item Automatically build and run tests on every change.
-    \item Produce repeatable deployment artifacts to staging.
-    \item Enable safe and frequent releases of incremental features.
-\end{itemize}
-
-\section{Evaluation Criterion %
-\BvrHint{\ldots measurable and attributable}}
-We define success using measurable metrics tied to the core workflow.
-
-\subsection{Primary evaluation metric}
-\textbf{Seat Search Time:} time between a user entering the library and checking into an available seat.
-\begin{itemize}[leftmargin=0.7cm]
-    \item Target: median search time $\le$ 3 minutes during pilot window.
-    \item Attribution: measured from system check-in logs.
-\end{itemize}
-
-\subsection{Secondary evaluation metrics}
-\begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Seat Utilization Rate:} Percentage of time available seats are actively occupied vs blocked.
-    \item \textbf{Abandoned Seat Recovery:} Number of seats automatically released due to expired temporary away permits.
-    \item \textbf{User Satisfaction:} Student reported satisfaction with finding seats easily.
-    \item \textbf{Reliability:} Uptime and availability of the real-time map during peak hours.
-\end{itemize}
-
-\subsection{Pilot validation plan %
-\BvrHint{\ldots high-level}}
-\begin{itemize}[leftmargin=0.7cm]
-    \item Recruit pilot users to test the digital flow in a specific library zone.
-    \item Compare search times and seat utilization metrics against baseline observations.
-\end{itemize}
-
-\section{Scalability %
-\BvrHint{\ldots with foresight}}
-The proposition should scale in both theoretical and practical senses.
-
+\subsection{Representative Functional Requirements}
 \begin{enumerate}[leftmargin=0.7cm]
-    \item \textbf{Scalable (theoretically):} The system should support high concurrency during peak exam hours:
-    \begin{itemize}[leftmargin=0.7cm]
-        \item Optimizing real-time status updates via WebSockets or efficient polling.
-        \item Caching seat layout metadata.
-        \item Using stateless API design.
-    \end{itemize}
-    
-    \item \textbf{Operationally deployable (practically):} The system should run on common web hosting:
-    \begin{itemize}[leftmargin=0.7cm]
-        \item managed database,
-        \item containerized or platform-hosted deployment,
-        \item CI/CD pipeline for staging/production.
-    \end{itemize}
+    \item The system shall allow students to view real-time seat availability.
+    \item The system shall enforce a maximum time limit for the 'Temporary Away' status.
+    \item The system shall automatically transition a seat from 'Away' to 'Available' upon timer expiration.
+    \item The system shall prevent a single user from occupying multiple seats concurrently.
+    \item The system shall generate daily occupancy reports for administrators.
 \end{enumerate}
 
-\section{Engine availability heuristic}
-A mature set of ``engines'' (tooling/services) is available to implement this as a web-based project:
+\subsection{Representative Non-functional Requirements}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Web framework for REST APIs and templated/reactive pages.
-    \item Real-time engines (e.g., Socket.io, Firebase, Supabase Realtime).
-    \item Managed relational database.
-    \item Test framework for unit/integration tests.
-    \item CI runner and staging deployment target.
-\end{itemize}
-We will use these mature components to focus on workflow design, correctness, and measurement.
-
-\section{Project scope and deliverables %
-\BvrHint{\ldots iteration-friendly}}
-\subsection{Initial deliverable %
-\BvrHint{\ldots first iteration}}
-\begin{itemize}[leftmargin=0.7cm]
-    \item User login and session creation.
-    \item Basic interactive seat selection from a list or simple grid.
-    \item The 'Temporary Away' timer workflow.
-    \item CI: build + backend unit tests + linting.
+    \item \textbf{Performance:} Status updates should reflect on all connected clients within 2 seconds.
+    \item \textbf{Reliability:} The system must handle high concurrent check-ins during exam periods.
+    \item \textbf{Energy efficiency:} The UI will utilize efficient state polling or WebSockets to minimize client-side battery drain.
 \end{itemize}
 
-\subsection{Subsequent deliverables}
+\section{UML and System Modelling}
+The project will produce the following models:
 \begin{itemize}[leftmargin=0.7cm]
-    \item Interactive visual floor plan mapping.
-    \item Smart seat recommendation engine.
-    \item Waitlisting and group seating logic.
-    \item Admin dashboard for real-time analytics.
+    \item \textbf{Use-case diagram:} Student check-ins vs Admin overrides.
+    \item \textbf{Activity diagram:} The Temporary Away workflow and timer expiration.
+    \item \textbf{Sequence diagram:} Client-server interaction during a concurrent seat booking attempt.
+    \item \textbf{State diagram:} Seat lifecycle (Available, Occupied, Away, Maintenance).
+    \item \textbf{ER diagram:} Relational data model for Users, Seats, Zones, and Sessions.
 \end{itemize}
 
-\section{Risks and mitigations}
+\section{Software Architecture}
+A three-tier architecture with MVC principles is proposed.
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Adoption Friction:} Students may forget to check in/out. Mitigate by using a very short initial grace period or integrating with existing turnstile/ID scanners if possible.
-    \item \textbf{Real-Time Sync Issues:} High concurrent traffic might delay updates. Mitigate by using robust real-time caching solutions.
-    \item \textbf{Physical Verification:} Digital status might not match physical reality. Mitigate with community reporting (e.g., "This seat is empty but marked occupied").
+    \item \textbf{Presentation layer:} Responsive web interface.
+    \item \textbf{Application layer:} REST/WebSocket APIs handling timers and concurrency logic.
+    \item \textbf{Data layer:} Relational database containing layout metadata and historical sessions.
 \end{itemize}
+
+\section{Green Software Engineering}
+The project will incorporate:
+\begin{itemize}[leftmargin=0.7cm]
+    \item Event-driven WebSocket updates instead of aggressive client-side HTTP polling.
+    \item Dark-mode support for OLED power savings.
+    \item Minimal payload sizes for API responses to reduce network overhead.
+\end{itemize}
+
+\section{Agile Development Plan}
+The project will be organized into short sprints.
+\begin{center}
+\begin{tabularx}{\textwidth}{p{0.17\textwidth}X}
+\toprule
+\textbf{Sprint} & \textbf{Deliverable} \\
+\midrule
+Sprint 1 & Requirements, stakeholder analysis, SRS outline, and DB schema. \\
+Sprint 2 & Authentication and basic seat CRUD operations. \\
+Sprint 3 & Interactive Floor Map UI and real-time state propagation. \\
+Sprint 4 & The Temporary Away Timer engine and automated release logic. \\
+Sprint 5 & Admin Dashboard, analytics, and penalty enforcement logic. \\
+Sprint 6 & Testing, CI/CD pipeline finalization, and deployment. \\
+\bottomrule
+\end{tabularx}
+\end{center}
 
 \section{Summary}
-This project proposes a deployable web platform to manage library seating efficiently. It meets the course criteria by emphasizing time-to-value through rapid iterations, implementing CI/CD to support frequent safe releases, and using measurable evaluation criteria (specifically reducing seat search time and increasing active utilization). It remains focused on engineering workflow and scalability readiness while leaving room for future IoT/sensor enhancements.
+The Smart Library Seat Management System solves a critical logistical issue in educational environments. Its strongest value for UCS503 is that it encompasses the complete software engineering lifecycle—from complex state modeling and concurrency handling to Agile development and Green Software practices.
 
 \end{document}
