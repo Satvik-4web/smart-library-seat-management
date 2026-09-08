@@ -1,0 +1,34 @@
+name: Compile LaTeX
+
+on:
+  push:
+    paths:
+      - '**/*.tex'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v3
+
+      - name: Compile LaTeX documents
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: |
+            project-proposal/main.tex
+            project-report-prototype-stage/main.tex
+            project-report-final/main.tex
+          glob_root_file: true
+          # The action compiles the pdfs in their respective directories
+
+      - name: Commit and push generated PDFs
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add "**/*.pdf"
+          git commit -m "Auto-compile LaTeX to PDF" || echo "No changes to commit"
+          git push
