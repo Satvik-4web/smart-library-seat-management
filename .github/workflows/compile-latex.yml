@@ -22,7 +22,7 @@ jobs:
             project-proposal/main.tex
             project-report-prototype-stage/main.tex
             project-report-final/main.tex
-          glob_root_file: true
+          work_in_root_file_dir: true
           # The action compiles the pdfs in their respective directories
 
       - name: Commit and push generated PDFs
