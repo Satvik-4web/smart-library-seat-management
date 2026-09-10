@@ -3,23 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Seat Map</title>
+    <title>Smart Library Seat Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        .seat-container { display: flex; gap: 10px; margin-top: 20px; }
-        .seat { padding: 20px; border: 2px solid #ccc; border-radius: 8px; text-align: center; width: 100px; cursor: pointer;}
-        .available { background-color: #d4edda; border-color: #c3e6cb; }
-        .occupied { background-color: #f8d7da; border-color: #f5c6cb; pointer-events: none;}
-        .temporarily_away { background-color: #fff3cd; border-color: #ffeeba; }
+        .seat { transition: all 0.3s ease; }
+        .seat:hover { transform: scale(1.05); }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(234, 179, 8, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); }
+        }
     </style>
 </head>
-<body>
-    <h1>Library Seat Management - Floor 1</h1>
-    <p>Click an available seat to occupy it.</p>
-    <div id="seat-map" class="seat-container">
-        <!-- Seats will be rendered here by JS -->
+<body class="bg-gray-50 text-gray-800 h-screen flex flex-col font-sans">
+    
+    <!-- Navbar -->
+    <nav class="bg-indigo-700 text-white p-4 shadow-md flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <i class="fa-solid fa-book-open-reader text-2xl"></i>
+            <h1 class="text-xl font-bold tracking-wide">Smart Library System</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span class="text-sm bg-indigo-800 px-3 py-1 rounded-full"><i class="fa-solid fa-user mr-2"></i>Student Portal</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col md:flex-row max-w-7xl mx-auto w-full p-4 gap-6">
+        
+        <!-- Sidebar / Controls -->
+        <div class="w-full md:w-1/3 space-y-6">
+            <!-- Active Session Card -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h2 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Your Active Session</h2>
+                <div id="session-info" class="text-center py-6 text-gray-500">
+                    <p>No active seat booked.</p>
+                    <p class="text-sm mt-2">Select an available seat from the map.</p>
+                </div>
+                <div id="active-controls" class="hidden flex-col items-center space-y-4">
+                    <div class="text-3xl font-bold text-indigo-600" id="current-seat">A12</div>
+                    <div id="timer-display" class="text-xl font-mono text-amber-600 hidden pulse bg-amber-50 px-4 py-2 rounded-lg border border-amber-200">
+                        Away: 29:59
+                    </div>
+                    <div class="flex space-x-3 w-full">
+                        <button onclick="toggleBreak()" id="break-btn" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-2 rounded-lg font-medium transition shadow-sm">
+                            <i class="fa-solid fa-mug-hot mr-2"></i>Take Break
+                        </button>
+                        <button onclick="endSession()" class="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-medium transition shadow-sm">
+                            <i class="fa-solid fa-right-from-bracket mr-2"></i>Leave
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h2 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Legend</h2>
+                <ul class="space-y-3">
+                    <li class="flex items-center"><div class="w-4 h-4 bg-green-500 rounded mr-3"></div> <span class="text-gray-600">Available</span></li>
+                    <li class="flex items-center"><div class="w-4 h-4 bg-gray-400 rounded mr-3"></div> <span class="text-gray-600">Occupied</span></li>
+                    <li class="flex items-center"><div class="w-4 h-4 bg-amber-400 rounded mr-3"></div> <span class="text-gray-600">Temporarily Away</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Floor Map -->
+        <div class="w-full md:w-2/3 bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800">Ground Floor - Reading Zone</h2>
+                <span class="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">Occupancy: <span id="occupancy-rate">45%</span></span>
+            </div>
+            
+            <div class="flex-1 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 p-8 flex items-center justify-center relative overflow-hidden">
+                <!-- Desk Layout -->
+                <div class="grid grid-cols-4 gap-8" id="seat-grid">
+                    <!-- Seats generated via JS -->
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        // Mock Seat Data
+        const seats = Array.from({length: 16}, (_, i) => ({
+            id: `A${i+1}`,
+            status: Math.random() > 0.6 ? 'occupied' : 'available'
+        }));
+        
+        let currentSession = null;
+        let timerInterval = null;
+        let timeLeft = 1800; // 30 mins in seconds
+
+        function initMap() {
+            const grid = document.getElementById('seat-grid');
+            grid.innerHTML = '';
+            
+            let occupiedCount = 0;
+            seats.forEach(seat => {
+                const el = document.createElement('div');
+                let colorClass = seat.status === 'available' ? 'bg-green-500 hover:bg-green-600 cursor-pointer shadow-green-500/30' : 
+                                seat.status === 'occupied' ? 'bg-gray-400 cursor-not-allowed' : 
+                                'bg-amber-400 pulse shadow-amber-400/50';
+                
+                if (seat.id === currentSession) colorClass = 'bg-indigo-500 ring-4 ring-indigo-300';
+                if(seat.status !== 'available') occupiedCount++;
+
+                el.className = `seat w-16 h-16 rounded-t-xl rounded-b-md shadow-md flex items-center justify-center text-white font-bold ${colorClass}`;
+                el.innerText = seat.id;
+                
+                if (seat.status === 'available' && !currentSession) {
+                    el.onclick = () => bookSeat(seat.id);
+                }
+                grid.appendChild(el);
+            });
+            
+            document.getElementById('occupancy-rate').innerText = `${Math.round((occupiedCount/seats.length)*100)}%`;
+        }
+
+        function bookSeat(id) {
+            const seat = seats.find(s => s.id === id);
+            seat.status = 'occupied';
+            currentSession = id;
+            
+            document.getElementById('session-info').classList.add('hidden');
+            document.getElementById('active-controls').classList.remove('hidden');
+            document.getElementById('active-controls').classList.add('flex');
+            document.getElementById('current-seat').innerText = `Seat ${id}`;
+            
+            initMap();
+        }
+
+        function toggleBreak() {
+            const seat = seats.find(s => s.id === currentSession);
+            const btn = document.getElementById('break-btn');
+            const timer = document.getElementById('timer-display');
+            
+            if (seat.status === 'occupied') {
+                seat.status = 'away';
+                btn.innerHTML = '<i class="fa-solid fa-play mr-2"></i>Resume';
+                btn.classList.replace('bg-amber-500', 'bg-green-500');
+                btn.classList.replace('hover:bg-amber-600', 'hover:bg-green-600');
+                timer.classList.remove('hidden');
+                
+                // Start mock timer
+                timeLeft = 1800;
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+                    const s = (timeLeft % 60).toString().padStart(2, '0');
+                    timer.innerText = `Away: ${m}:${s}`;
+                    if(timeLeft <= 0) autoRelease();
+                }, 1000);
+            } else {
+                seat.status = 'occupied';
+                btn.innerHTML = '<i class="fa-solid fa-mug-hot mr-2"></i>Take Break';
+                btn.classList.replace('bg-green-500', 'bg-amber-500');
+                btn.classList.replace('hover:bg-green-600', 'hover:bg-amber-600');
+                timer.classList.add('hidden');
+                clearInterval(timerInterval);
+            }
+            initMap();
+        }
+
+        function endSession() {
+            const seat = seats.find(s => s.id === currentSession);
+            seat.status = 'available';
+            currentSession = null;
+            clearInterval(timerInterval);
+            
+            document.getElementById('session-info').classList.remove('hidden');
+            document.getElementById('active-controls').classList.add('hidden');
+            document.getElementById('active-controls').classList.remove('flex');
+            document.getElementById('timer-display').classList.add('hidden');
+            
+            const btn = document.getElementById('break-btn');
+            btn.innerHTML = '<i class="fa-solid fa-mug-hot mr-2"></i>Take Break';
+            btn.classList.replace('bg-green-500', 'bg-amber-500');
+            
+            initMap();
+        }
+        
+        function autoRelease() {
+            alert("Your break time expired! Seat released automatically.");
+            endSession();
+        }
+
+        // Run
+        initMap();
+    </script>
 </body>
 </html>
