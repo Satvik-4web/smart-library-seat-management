@@ -1,0 +1,17 @@
+export const syntheticStudents = [
+  { studentId: "22COE101", name: "Student 101", department: "Computer Engineering", year: 4 },
+  { studentId: "22COE114", name: "Student 114", department: "Computer Engineering", year: 4 },
+  { studentId: "22CSE203", name: "Student 203", department: "Computer Science", year: 4 },
+  { studentId: "23COE087", name: "Student 087", department: "Computer Engineering", year: 3 },
+  { studentId: "23CSE142", name: "Student 142", department: "Computer Science", year: 3 },
+  { studentId: "24COE051", name: "Student 051", department: "Computer Engineering", year: 2 },
+  { studentId: "24ECE012", name: "Student 012", department: "Electronics", year: 2 },
+  { studentId: "21MEE099", name: "Student 099", department: "Mechanical Engineering", year: 5 },
+  { studentId: "23CHE044", name: "Student 044", department: "Chemical Engineering", year: 3 },
+  { studentId: "25CSE001", name: "Student 001", department: "Computer Science", year: 1 },
+  { studentId: "25COE010", name: "Student 010", department: "Computer Engineering", year: 1 },
+  { studentId: "22CIE055", name: "Student 055", department: "Civil Engineering", year: 4 },
+  { studentId: "24ECE105", name: "Student 105", department: "Electronics", year: 2 },
+  { studentId: "23MEE112", name: "Student 112", department: "Mechanical Engineering", year: 3 },
+  { studentId: "21CIE088", name: "Student 088", department: "Civil Engineering", year: 5 },
+];
